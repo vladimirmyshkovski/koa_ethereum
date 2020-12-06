@@ -2,7 +2,9 @@
 // for example: require('lib/mongo/idGenerator')
 // all options can be found here: https://gist.github.com/branneman/8048520
 require('app-module-path').addPath(__dirname);
+const http = require('http');
 const Koa = require('koa');
+const shutdown = require('koa-graceful-shutdown');
 
 process.env.APP_ENV = process.env.APP_ENV || 'development';
 
@@ -15,7 +17,11 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 const app = new Koa();
+
 require('./config/koa')(app);
+
+const server = http.createServer(app.callback());
+app.use(shutdown(server));
 
 require('services/socketIo.service');
 
