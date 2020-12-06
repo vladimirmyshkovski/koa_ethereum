@@ -1,9 +1,7 @@
 const Web3 = require('web3');
 
-let w3 = new Web3('ws://geth:8546');
+let w3 = new Web3(process.env.ETHEREUM_BASE_URL);
 
-console.log('w3', w3)
+w3.setProvider(new Web3.providers.WebsocketProvider(process.env.ETHEREUM_BASE_URL));
 
-w3.setProvider(new Web3.providers.WebsocketProvider('ws://geth:8546'));
-
-module.exports = w3
+module.exports = w3;
