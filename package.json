@@ -48,6 +48,7 @@
     "joi": "17.2.1",
     "koa": "2.13.0",
     "koa-bodyparser": "4.3.0",
+    "koa-graceful-shutdown": "1.1.0",
     "koa-helmet": "5.2.0",
     "koa-logger": "3.2.1",
     "koa-mount": "4.0.0",
