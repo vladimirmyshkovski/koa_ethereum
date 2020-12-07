@@ -15,7 +15,7 @@ const pendingTransactions = web3.eth.subscribe('pendingTransactions', function(e
     if (error) {
       logger.error(error);
     }
-    emitter.emit('transactions', reply)
+    emitter.emit('transactions', reply);
   })
 });
 
