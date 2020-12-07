@@ -1,3 +1,4 @@
+const config = require('config');
 const client = require('redis').createClient({
   host: config.redis.host,
   port: config.redis.port,
