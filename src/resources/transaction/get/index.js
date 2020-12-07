@@ -1,15 +1,22 @@
 const Joi = require('joi');
 const web3 = require('w3');
+const client = require('cache');
 const validate = require('middlewares/validate');
 
-const ethereumTransactionsData = {};
 
 async function getTransactionByNumber(transactionId) {
-  if (typeof(ethereumTransactionsData[transactionId]) !== 'undefined') {
-    return ethereumTransactionsData[transactionId];
+  const key = `transaction_hash_${transactionId}`;
+  let value = null;
+  client.get(key, function(err, reply) {
+  	if (reply) {
+  	  value = JSON.parse(reply)
+    }
+  });
+  if (!value) {
+    value = await web3.eth.getTransaction(transactionId);
+    client.setex(key, 60*60, JSON.stringify(value));
   }
-  ethereumTransactionsData[transactionId] = await web3.eth.getTransaction(transactionId);
-  return ethereumTransactionsData[transactionId];
+  return value
 }
 
 const handler = async (ctx) => {
