@@ -48,3 +48,21 @@ exports.getBlockByNumber = async (numberOfBLock) => {
   }
   return value;
 };
+
+exports.getAddressTransactions = async (address, namespace) => {
+  const currentBlock = await web3.eth.getBlockNumber();
+  let transactionCount = await web3.eth.getTransactionCount(address, currentBlock);
+  for (let i = currentBlock; i >= 0 && (transactionCount > 0 || balance > 0); --i) {
+    try {
+      const block = await web3.eth.getBlock(i, true);
+      if (block && block.transactions) {
+        block.transactions.forEach(function(transaction) {
+          namespace.emit('transactions', JSON.stringify(transaction));
+          --transactionCount;
+        });
+      }
+    } catch (e) {
+      logger.error("Error on web3.service.getAccountTransactions in block " + i, e);
+    };
+  };
+};

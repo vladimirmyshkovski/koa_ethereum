@@ -2,6 +2,7 @@ const io = require('socket.io')();
 const redisAdapter = require('socket.io-redis');
 
 const config = require('config');
+const web3Service = require('services/web3.service');
 const tokenService = require('resources/token/token.service');
 const { COOKIES } = require('app.constants');
 
@@ -67,6 +68,12 @@ io.on('connection', (client) => {
   client.on('unsubscribe', (roomId) => {
     client.leave(roomId);
   });
+});
+
+io.of(/^\/transactions\/0x[a-fA-F0-9]{40}$/).on('connection', (socket) => {
+  const namespace = socket.nsp;
+  const address = namespace.name;
+  web3Service.getAddressTransactions(address, namespace);
 });
 
 io.listen(config.socketPort);
