@@ -1,19 +1,7 @@
-const Joi = require('joi');
-const web3 = require('w3');
-const validate = require('middlewares/validate');
-
-const ethereumTransactionsData = {};
-
-async function getTransactionByNumber(transactionId) {
-  if (typeof(ethereumTransactionsData[transactionId]) !== 'undefined') {
-    return ethereumTransactionsData[transactionId];
-  }
-  ethereumTransactionsData[transactionId] = await web3.eth.getTransaction(transactionId);
-  return ethereumTransactionsData[transactionId];
-}
+const web3Service = require('services/web3.service');
 
 const handler = async (ctx) => {
-  ctx.body = await getTransactionByNumber(ctx.params.id);
+  ctx.body = await web3Service.getTransactionByNumber(ctx.params.id);
   ctx.status = 200;
 };
 
