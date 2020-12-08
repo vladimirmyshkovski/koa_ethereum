@@ -1,7 +1,7 @@
 const web3Service = require('services/web3.service');
 
 async function validator(ctx, next) {
-  const hash = ctx.params.hash;
+  const { hash } = ctx.params;
   const regex = RegExp(/^0x([A-Fa-f0-9]{64})$/);
   if (typeof hash !== 'string') {
     ctx.body = {
@@ -10,7 +10,7 @@ async function validator(ctx, next) {
       },
     };
     ctx.throw(400);
-  };
+  }
   if (hash.lemgth <= 20) {
     ctx.body = {
       errors: {
@@ -18,7 +18,7 @@ async function validator(ctx, next) {
       },
     };
     ctx.throw(400);
-  };
+  }
   if (!regex.test(hash)) {
     ctx.body = {
       errors: {
@@ -26,7 +26,7 @@ async function validator(ctx, next) {
       },
     };
     ctx.throw(400);
-  };
+  }
   const transaction = await web3Service.getTransactionByNumber(ctx.params.hash);
   if (!transaction) {
     ctx.body = {
