@@ -27,6 +27,15 @@ async function validator(ctx, next) {
     };
     ctx.throw(400);
   };
+  const transaction = await web3Service.getTransactionByNumber(ctx.params.hash);
+  if (!transaction) {
+    ctx.body = {
+      errors: {
+        hash: ['Ethereum transaction hash is incorrect'],
+      },
+    };
+    ctx.throw(400);
+  }
   await next();
 }
 
